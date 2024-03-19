@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "288880821035",
+    "project_id": "craftroots-e578e",
+    "storage_bucket": "craftroots-e578e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288880821035:android:006cd69641886fcf673b6e",
+        "android_client_info": {
+          "package_name": "com.example.craftroots"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhW9KITtTJNIacss7JtJfPrAGY-77LijM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
