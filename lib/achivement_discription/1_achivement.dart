@@ -95,31 +95,6 @@ class _FirstAchivementState extends State<FirstAchivement> {
               ],
             ),
             const SizedBox(height: 20),
-            Container(
-              decoration: BoxDecoration(
-                color:
-                    Colors.grey[200], // Set your desired background color here
-                borderRadius:
-                    BorderRadius.circular(10), // Set the desired radius here
-              ),
-              child: const SizedBox(
-                width: double.infinity, // Set your desired width here
-                height: 200, // Set your desired height here
-                child: Column(
-                  children: [
-                    Text(
-                      'Have you ever heard the following facts about traditional knitting and crochet?',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                        'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat incididunt ut labore.'),
-                  ],
-                ), // Replace 'data' with the widget you want to place inside SizedBox
-              ),
-            )
           ],
         ),
       ),

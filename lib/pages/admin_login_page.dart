@@ -180,10 +180,10 @@ class _LearnerLoginPageState extends State<AdminLoginPage> {
                               offset: const Offset(2, 2))
                         ],
                         borderRadius: BorderRadius.circular(100),
-                        color: Colors.black),
+                        color: Color(0xffebd9b4)),
                     child: Text('Login',
                         style: TextStyle(
-                            color: Colors.white.withOpacity(.8),
+                            color: Colors.black,
                             fontSize: 20,
                             fontWeight: FontWeight.bold)),
                   ),

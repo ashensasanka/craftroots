@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../components/profile_text_box.dart';
+import '../components/text_box.dart';
 import '../pages/user_type_page.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -16,7 +18,48 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   int current = 0;
-  late PageController pageController; // Define PageController
+  late PageController pageController;
+  final userCollection = FirebaseFirestore.instance.collection("learner_users");
+  final User? user = FirebaseAuth.instance.currentUser;
+
+
+  Future<void> editField(String field) async {
+    String newValue = "";
+    await showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: Text(
+            "Edit $field",
+            style: const TextStyle(color: Colors.white),
+          ),
+          content: TextField(
+            autofocus: true,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+                hintText: "Enter new $field",
+                hintStyle: const TextStyle(color: Colors.grey)
+            ),
+            onChanged: (value){
+              newValue = value;
+            },
+          ),
+          actions: [
+            TextButton(
+                onPressed: ()=> Navigator.pop(context),
+                child: const Text('Cancel',
+                  style: TextStyle(color: Colors.white),)),
+            TextButton(
+                onPressed: ()=> Navigator.of(context).pop(newValue),
+                child: const Text('Save',
+                  style: TextStyle(color: Colors.white),)),
+          ],
+        ));
+
+    if (newValue.trim().isNotEmpty){
+      await userCollection.doc(user?.email).update({field: newValue});
+    }
+  }
 
   @override
   void initState() {
@@ -266,33 +309,15 @@ class _ProfilePageState extends State<ProfilePage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                documentSnapshot.data?.get('name'),
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
-                                  documentSnapshot.data?.get('email'),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                                child: Text(
-                                  documentSnapshot.data?.get('password'),
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
+                              ProfileTextBox(
+                                text: documentSnapshot.data?.get('name'),
+                                onPressed: ()=> editField('name'),),
+                              ProfileTextBox(
+                                text: documentSnapshot.data?.get('email'),
+                                onPressed: ()=> editField('email'),),
+                              ProfileTextBox(
+                                text: documentSnapshot.data?.get('password'),
+                                onPressed: ()=> editField('password'),),
                             ],
                           ),
                         ],

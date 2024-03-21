@@ -98,7 +98,7 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
           ),
           SizedBox(height: 10,),
           Text('Post Made by You',
-            style: TextStyle(fontSize: 17),),
+            style: TextStyle(fontSize: 17,fontWeight: FontWeight.bold),),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Container(
@@ -132,7 +132,6 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                             'Learner1',
                             style: TextStyle(
                               fontSize: 18,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(height: 8),
@@ -159,17 +158,9 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                                             size: 24,
                                           ),
                                           SizedBox(height: 10),
-                                          // if (i == touchedStarIndex)
-                                          //   Container(
-                                          //     width: 40,
-                                          //     height: 4,
-                                          //     color: Colors.black,
-                                          //   ),
                                         ],
                                       ),
                                     ),
-                                    // SizedBox(height: 10),
-                                    // Text(touchedStarIndex == i ? '${(i + 1) * 20}%' : ''),
                                   ],
                                 ),
                             ],
@@ -188,12 +179,15 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
             endIndent: 20,
             color: Colors.black,
           ),
-          Text('Community Post'),
+          Text('Community Post',style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16
+          ),),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
               width: 400,
-              height: 400,
+              height: 395,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.grey[300],
@@ -213,7 +207,7 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                         },
                         child: Container(
                           width: 360,
-                          height: 190,
+                          height: 160,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: Colors.white,
@@ -241,13 +235,12 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                                         'Learner1',
                                         style: TextStyle(
                                           fontSize: 18,
-                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(height: 8),
                                       // Description
                                       Text(
-                                        'Hi, I learned Batik through CraftRoots and this is how my first product came out',
+                                        'Hi, I learned Batik ..........',
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       Row(
@@ -308,7 +301,7 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                         },
                         child: Container(
                           width: 360,
-                          height: 190,
+                          height: 160,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: Colors.white,
@@ -337,13 +330,12 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                                         'Learner1',
                                         style: TextStyle(
                                           fontSize: 18,
-                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(height: 8),
                                       // Description
                                       Text(
-                                        'Hi, I learned Batik through CraftRoots and this is how my first product came out',
+                                        'Have you ever hear..........',
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       Row(
@@ -404,7 +396,7 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                         },
                         child: Container(
                           width: 360,
-                          height: 190,
+                          height: 160,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8),
                             color: Colors.white,
@@ -433,13 +425,12 @@ class _ViewComAchivPageState extends State<ViewComAchivPage> {
                                         'Learner1',
                                         style: TextStyle(
                                           fontSize: 18,
-                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                       SizedBox(height: 8),
                                       // Description
                                       Text(
-                                        'Hi, I learned Batik through CraftRoots and this is how my first product came out',
+                                        'Have you ever hear..........',
                                         style: TextStyle(fontSize: 16),
                                       ),
                                       Row(

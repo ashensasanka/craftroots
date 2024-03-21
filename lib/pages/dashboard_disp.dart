@@ -208,11 +208,124 @@ class _DashBoardDispState extends State<DashBoardDisp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              _buildDetailRow('Name', documentSnapshot.data?.get('name')),
-              _buildDetailRow('Email', documentSnapshot.data?.get('email')),
-              _buildDetailRow('Password', documentSnapshot.data?.get('password')),
-              _buildDetailRow('Location', documentSnapshot.data?.get('address')),
-              _buildDetailRow('Phone', documentSnapshot.data?.get('contact')),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(50, 20, 10, 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Text(
+                            'Name :',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            'Email :',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            'Password :',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            'Location :',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            'Phone :',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                          child: Text(
+                            documentSnapshot.data?.get('name'),
+                            style: TextStyle(
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            documentSnapshot.data?.get('email'),
+                            style: TextStyle(
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            documentSnapshot.data?.get('password'),
+                            style: TextStyle(
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            documentSnapshot.data?.get('address'),
+                            style: TextStyle(
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 10, 0),
+                          child: Text(
+                            documentSnapshot.data?.get('contact'),
+                            style: TextStyle(
+                                fontSize: 16
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              // _buildDetailRow('Name', documentSnapshot.data?.get('name')),
+              // _buildDetailRow('Email', documentSnapshot.data?.get('email')),
+              // _buildDetailRow('Password', documentSnapshot.data?.get('password')),
+              // _buildDetailRow('Location', documentSnapshot.data?.get('address')),
+              // _buildDetailRow('Phone', documentSnapshot.data?.get('contact')),
             ],
           ),
         );

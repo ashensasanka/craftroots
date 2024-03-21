@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 import 'dashboard_learner.dart';
+import 'forgot_password_page.dart';
 
 class LearnerLoginPage extends StatefulWidget {
   final Function()? onTop;
@@ -72,40 +73,40 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Text('Welcome Back \n to CraftRoots !',
-                style: TextStyle(
-                  fontSize: 40,
-                  fontWeight: FontWeight.bold
-                ),),
+                Text(
+                  'Welcome Back \n to CraftRoots !',
+                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                ),
                 const SizedBox(
                   height: 40,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20)
-                      .copyWith(bottom: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 30, vertical: 20)
+                          .copyWith(bottom: 10),
                   child: TextField(
                     controller: email,
                     style: const TextStyle(color: Colors.black, fontSize: 17),
                     decoration: InputDecoration(
-                        prefixIconConstraints:
-                        const BoxConstraints(minWidth: 45),
-                        prefixIcon: const Icon(
-                          Icons.alternate_email_outlined,
-                          color: Colors.black,
-                          size: 24,
-                        ),
-                        border: InputBorder.none,
-                        hintText: 'Enter Email',
-                        hintStyle: const TextStyle(
-                            color: Colors.black, fontSize: 14.5),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(100),
-                            borderSide:
-                            const BorderSide(color: Colors.black),),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(100),
-                            borderSide:
-                            const BorderSide(color: Colors.black),),),
+                      prefixIconConstraints: const BoxConstraints(minWidth: 45),
+                      prefixIcon: const Icon(
+                        Icons.alternate_email_outlined,
+                        color: Colors.black,
+                        size: 24,
+                      ),
+                      border: InputBorder.none,
+                      hintText: 'Enter Email',
+                      hintStyle:
+                          const TextStyle(color: Colors.black, fontSize: 14.5),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100),
+                        borderSide: const BorderSide(color: Colors.black),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(100),
+                        borderSide: const BorderSide(color: Colors.black),
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -120,14 +121,14 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
                     obscureText: isPasswordVisible ? false : true,
                     decoration: InputDecoration(
                         prefixIconConstraints:
-                        const BoxConstraints(minWidth: 45),
+                            const BoxConstraints(minWidth: 45),
                         prefixIcon: const Icon(
                           Icons.lock,
                           color: Colors.black,
                           size: 22,
                         ),
                         suffixIconConstraints:
-                        const BoxConstraints(minWidth: 45, maxWidth: 46),
+                            const BoxConstraints(minWidth: 45, maxWidth: 46),
                         suffixIcon: GestureDetector(
                           onTap: () {
                             setState(() {
@@ -148,12 +149,10 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
                             color: Colors.black, fontSize: 14.5),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(100),
-                            borderSide:
-                            const BorderSide(color: Colors.black)),
+                            borderSide: const BorderSide(color: Colors.black)),
                         focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(100),
-                            borderSide:
-                            const BorderSide(color: Colors.black))),
+                            borderSide: const BorderSide(color: Colors.black))),
                   ),
                 ),
                 const SizedBox(
@@ -170,26 +169,62 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       color: Colors.black,
-                        boxShadow: [
-                          BoxShadow(
-                              blurRadius: 4,
-                              color: Colors.black12.withOpacity(.2),
-                              offset: const Offset(2, 2))
-                        ],
-                        borderRadius: BorderRadius.circular(100),
-                        gradient: LinearGradient(colors: [
+                      boxShadow: [
+                        BoxShadow(
+                          blurRadius: 4,
+                          color: Colors.black12.withOpacity(.2),
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
+                      borderRadius: BorderRadius.circular(100),
+                      gradient: LinearGradient(
+                        colors: [
                           Color(0xfff9efdb),
-                          Color(0xffebd9b4)
-                        ])),
-                    child: Text('Login',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold)),
+                          Color(0xffebd9b4),
+                        ],
+                      ),
+                    ),
+                    child: Text(
+                      'Login',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Forgot your Password?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Reset',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 const SizedBox(
-                  height: 50,
+                  height: 30,
                 ),
                 const Text('Don\'t have an account?',
                     style: TextStyle(color: Colors.black, fontSize: 13)),
@@ -200,7 +235,11 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LearnerRegiterPage(userType: widget.userType,)),
+                      MaterialPageRoute(
+                        builder: (context) => LearnerRegiterPage(
+                          userType: widget.userType,
+                        ),
+                      ),
                     );
                   },
                   child: Container(
@@ -212,11 +251,13 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
                       border: Border.all(color: Colors.black),
                       borderRadius: BorderRadius.circular(100),
                     ),
-                    child: Text('Sign Up',
-                        style: TextStyle(
-                            color: Colors.black.withOpacity(.8),
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold)),
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(
+                          color: Colors.black.withOpacity(.8),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
                   ),
                 ),
                 const SizedBox(
