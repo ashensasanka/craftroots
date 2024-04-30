@@ -27,12 +27,35 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('Incorrect Email or Password'),
+            backgroundColor: Colors.white,
+            title: const Text(
+              'Alert!',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            content: const Text(
+              'Incorrect Email or Password',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Retry'),
+              ),
+            ],
           );
         },
       );
     }
   }
+
 
   void signUserIn() async {
     if (mounted) {
@@ -73,7 +96,7 @@ class _LearnerLoginPageState extends State<LearnerLoginPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Text(
+                const Text(
                   'Welcome Back \n to CraftRoots !',
                   style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
                 ),

@@ -2,28 +2,26 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../services/firestore.dart';
 import 'forum_page.dart';
 
-class ReplayPage extends StatefulWidget {
+class ViewPage extends StatefulWidget {
   final String message;
   final String owner;
-  const ReplayPage({Key? key, required this.message, required this.owner}) : super(key: key);
+  final String docID;
+  const ViewPage({Key? key, required this.message, required this.owner, required this.docID}) : super(key: key);
 
   @override
-  State<ReplayPage> createState() => _ReplayPageState();
+  State<ViewPage> createState() => _ViewPageState();
 }
 
-class _ReplayPageState extends State<ReplayPage> {
+class _ViewPageState extends State<ViewPage> {
   final TextEditingController _messageController = TextEditingController();
   final List<String> _messages = [];
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  late CollectionReference<Map<String, dynamic>> messageCollection;
+  final messageCollection = FirebaseFirestore.instance.collection("replay_message");
   final User? user = FirebaseAuth.instance.currentUser;
-  @override
-  void initState() {
-    super.initState();
-    messageCollection = FirebaseFirestore.instance.collection("replay_message${widget.message}");
-  }
+  final FireStoreService fireStoreService = FireStoreService();
 
   void editMessage(int index, String field) async {
     String newValue = '';
@@ -32,7 +30,7 @@ class _ReplayPageState extends State<ReplayPage> {
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
         title: Text(
-          "Edit Message",
+          "View Message",
           style: const TextStyle(color: Colors.white),
         ),
         content: TextField(
@@ -115,32 +113,42 @@ class _ReplayPageState extends State<ReplayPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 280,
-                    height: 70,
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
-                      child: Text(widget.message),
-                    ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 280,
+                        height: 70,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 5, 5, 0),
+                          child: Text(widget.message),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          _confirmDelete(context, widget.docID);
+                        },
+                        child: Text('Delete'),
+                      ),
+                    ],
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                     child: Row(
                       children: [
                         StreamBuilder<DocumentSnapshot>(
-                            stream: _firestore.collection('learner_users').doc(widget.owner).snapshots(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return Center(child: CircularProgressIndicator());
-                              }
-                              if (snapshot.hasError) {
-                                return Center(child: Text('Error: ${snapshot.error}'));
-                              }
-                              final DocumentSnapshot document = snapshot.data!;
-                              final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-                              return Text('${data['name']}');
-                            },
-                          ),
+                          stream: _firestore.collection('learner_users').doc(widget.owner).snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Error: ${snapshot.error}'));
+                            }
+                            final DocumentSnapshot document = snapshot.data!;
+                            final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+                            return Text('${data['name']}');
+                          },
+                        ),
                         SizedBox(
                           width: 20,
                         ),
@@ -190,7 +198,8 @@ class _ReplayPageState extends State<ReplayPage> {
                   itemBuilder: (context, index) {
                     final message = documents1[index]['message'];
                     final owner = documents1[index]['email'];
-                    final field = documents1[index]['docid'];
+                    final Timestamp timestamp = documents1[index]['timestamp'];
+                    final DateTime dateTime = timestamp.toDate();
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -257,10 +266,10 @@ class _ReplayPageState extends State<ReplayPage> {
                                           child: Text(message),
                                         ),
                                       ),
-                                      TextButton(
-                                        onPressed: () => editMessage(index,field),
-                                        child: Text('Edit'),
-                                      ),
+                                      // TextButton(
+                                      //   onPressed: () => editMessage(index,message),
+                                      //   child: Text('Edit'),
+                                      // ),
                                     ],
                                   ),
                                   Padding(
@@ -284,7 +293,7 @@ class _ReplayPageState extends State<ReplayPage> {
                                         SizedBox(
                                           width: 20,
                                         ),
-                                        Text('${DateTime.now().toString().split(' ')[0]}'),
+                                        Text(dateTime.toString().split(' ')[0]),
                                         SizedBox(
                                           width: 20,
                                         ),
@@ -305,53 +314,47 @@ class _ReplayPageState extends State<ReplayPage> {
                 );
               },
           ),
-
-
           ),
           Divider(
             thickness: 2,
             indent: 20,
             endIndent: 20,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                Icon(Icons.person_pin_circle_outlined, size: 35),
-                SizedBox(width: 10),
-                Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
-                    ),
-                  ),
-                ),
-                SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () async {
-                    final message = _messageController.text;
-                    if (message.isNotEmpty) {
-                      final docRef = await _firestore.collection('replay_message${widget.message}').add({
-                        'message': message,
-                        'uid': user?.uid,
-                        'email': user?.email,
-                        'timestamp': FieldValue.serverTimestamp(),
-                      });
-                      await docRef.update({'docid': docRef.id});
-                      _messageController.clear();
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffebd9b4), // Change button color to black
-                  ),
-                  child: Text('Send', style: TextStyle(color: Colors.black)),
-                ),
+        ],
+      ),
+    );
+  }
+  Future<void> _confirmDelete(BuildContext context, String docID) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Are you sure you want to delete this note?'),
               ],
             ),
           ),
-        ],
-      ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                fireStoreService.deleteNote(docID);
+                Navigator.of(context).pop();
+              },
+              child: Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

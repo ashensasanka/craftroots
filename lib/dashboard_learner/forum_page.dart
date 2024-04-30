@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftroots/dashboard_learner/replay_forum_page.dart';
+import 'package:craftroots/dashboard_learner/view_forum_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ForumPage extends StatefulWidget {
@@ -13,6 +15,7 @@ class _ForumPageState extends State<ForumPage> {
   final TextEditingController _messageController = TextEditingController();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final messageCollection = FirebaseFirestore.instance.collection("replay_message");
+  final User? user = FirebaseAuth.instance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,11 @@ class _ForumPageState extends State<ForumPage> {
                 return ListView.builder(
                   itemCount: documents1.length,
                   itemBuilder: (context, index) {
+                    DocumentSnapshot document = documents1[index];
+                    String docID = document.id;
                     final message = documents1[index]['message'];
+                    final uid = documents1[index]['uid'];
+                    final owner = documents1[index]['email'];
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -64,8 +71,8 @@ class _ForumPageState extends State<ForumPage> {
                                     ),
                                   ),
                                   Expanded(
-                                    child: StreamBuilder<QuerySnapshot>(
-                                      stream: _firestore.collection('learner_users').snapshots(),
+                                    child: StreamBuilder<DocumentSnapshot>(
+                                      stream: _firestore.collection('learner_users').doc(owner).snapshots(),
                                       builder: (context, snapshot) {
                                         if (snapshot.connectionState == ConnectionState.waiting) {
                                           return Center(child: CircularProgressIndicator());
@@ -73,16 +80,30 @@ class _ForumPageState extends State<ForumPage> {
                                         if (snapshot.hasError) {
                                           return Center(child: Text('Error: ${snapshot.error}'));
                                         }
-                                        final List<DocumentSnapshot> documents = snapshot.data!.docs;
+                                        final DocumentSnapshot document = snapshot.data!;
+                                        final Map<String, dynamic> data = document.data() as Map<String, dynamic>;
                                         return Padding(
                                           padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
                                           child: Row(
                                             children: [
-                                              Text('${documents[index]['name']}'),
+                                              Text('${data['name']}'),
                                               SizedBox(width: 10),
                                               Text('${DateTime.now().toString().split(' ')[0]}'),
                                               SizedBox(width: 20),
-                                              Text('${snapshot.data!.size} answers'),
+                                              Expanded(
+                                                child: StreamBuilder<QuerySnapshot>(
+                                                  stream: _firestore.collection('replay_message${message}').snapshots(),
+                                                  builder: (context, snapshot) {
+                                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                                      return Center(child: CircularProgressIndicator());
+                                                    }
+                                                    if (snapshot.hasError) {
+                                                      return Center(child: Text('Error: ${snapshot.error}'));
+                                                    }
+                                                    return Text('${snapshot.data!.size} answers');
+                                                  },
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         );
@@ -107,12 +128,12 @@ class _ForumPageState extends State<ForumPage> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => ReplayPage(message: message),
+                                        builder: (context) => user?.uid == uid? ViewPage(message: message, owner:owner, docID:docID):ReplayPage(message: message,owner: owner),
                                       ),
                                     );
                                     print('Reply to message: $message');
                                   },
-                                  child: Text('Reply'),
+                                  child: user?.uid == uid? Text('View'):Text('Replay'),
                                 ),
                               ),
                             ),
@@ -145,6 +166,8 @@ class _ForumPageState extends State<ForumPage> {
                     if (message.isNotEmpty) {
                       _firestore.collection('community').add({
                         'message': message,
+                        'uid':user?.uid,
+                        'email':user?.email,
                         'timestamp': Timestamp.now(),
                       });
                       _messageController.clear();

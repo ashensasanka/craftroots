@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +18,7 @@ class HomeController extends GetxController{
   // defined the variables as FirebaseFirestore store data as key value and FirebaseStorage store data as files
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
   //Defined the Collections variables of database
   late CollectionReference logdetailsCollection;
   late CollectionReference productCollection;
@@ -104,7 +106,7 @@ class HomeController extends GetxController{
     postdetailsCollection = firestore.collection('postdetails'); //postShowUi
     // messageCollection = firestore.collection('message');
     cartCollection = firestore.collection('approved_post');
-    videoAddCollection = firestore.collection('videos');
+    videoAddCollection = firestore.collection('videos${user?.uid}');
     await fetchCategory();
     await fetchProducts();
     // await fetchPostDetails();

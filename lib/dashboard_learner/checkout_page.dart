@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftroots/dashboard_learner/cart_page.dart';
 import 'package:craftroots/dashboard_learner/paymentdetails_page.dart';
 import 'package:craftroots/dashboard_learner/shop_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class CheckoutPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   // Firestore instance
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   // Function to fetch Firestore document data
   Future<void> _fetchUserData(String email) async {
@@ -57,7 +59,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   void initState() {
     super.initState();
     // Fetch user data when the widget is initialized
-    _fetchUserData('ashen4@gmail.com'); // Replace with user's email
+    _fetchUserData(user!.email as String); // Replace with user's email
   }
 
   @override
@@ -72,135 +74,137 @@ class _CheckoutPageState extends State<CheckoutPage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 80,),
-            Text(
-              'Phone number',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            TextFormField(
-              controller: phoneNumberController,
-              decoration: InputDecoration(
-                hintText: 'Enter your phone number',
-                filled: true,
-                fillColor: Colors.grey[200], // Set your desired background color here
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the desired radius here
-                  borderSide: BorderSide.none,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 80,),
+              Text(
+                'Phone number',
+                style: TextStyle(
+                  fontSize: 18,
                 ),
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'City',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            TextFormField(
-              controller: cityController,
-              decoration: InputDecoration(
-                hintText: 'Enter your city',
-                filled: true,
-                fillColor: Colors.grey[200], // Set your desired background color here
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the desired radius here
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Text(
-              'Address',
-              style: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-            TextFormField(
-              controller: addressController,
-              maxLines: 3,
-              decoration: InputDecoration(
-                hintText: 'Enter your address',
-                filled: true,
-                fillColor: Colors.grey[200], // Set your desired background color here
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0), // Set the desired radius here
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
-            SizedBox(height: 90,),
-            Row(
-              children: [
-              SizedBox(width: 40,),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ShopPage(),
-                    ),
-                  );
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: Colors.black,
-                ),
-                label: Text(
-                  'Back',
-                  style: TextStyle(color: Colors.black),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white,
-                  side: BorderSide(color: Colors.black), // Add border color here
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20), // Add border radius here
+              TextFormField(
+                controller: phoneNumberController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your phone number',
+                  filled: true,
+                  fillColor: Colors.grey[200], // Set your desired background color here
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Set the desired radius here
+                    borderSide: BorderSide.none,
                   ),
                 ),
               ),
-              SizedBox(width: 50,),
-              ElevatedButton(
+              SizedBox(height: 20),
+              Text(
+                'City',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              TextFormField(
+                controller: cityController,
+                decoration: InputDecoration(
+                  hintText: 'Enter your city',
+                  filled: true,
+                  fillColor: Colors.grey[200], // Set your desired background color here
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Set the desired radius here
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'Address',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              TextFormField(
+                controller: addressController,
+                maxLines: 3,
+                decoration: InputDecoration(
+                  hintText: 'Enter your address',
+                  filled: true,
+                  fillColor: Colors.grey[200], // Set your desired background color here
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0), // Set the desired radius here
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              SizedBox(height: 90,),
+              Row(
+                children: [
+                SizedBox(width: 40,),
+                ElevatedButton.icon(
                   onPressed: () {
-                    // Call function to update Firestore document
-                    _updateUserData('ashen4@gmail.com'); // Replace with user's email
-
-                    // Navigate to the next page
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentPage(data:widget.data),
+                        builder: (context) => ShopPage(),
                       ),
                     );
                   },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.black,
+                  ),
+                  label: Text(
+                    'Back',
+                    style: TextStyle(color: Colors.black),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xffebd9b4), // Change button color to black
+                    backgroundColor: Colors.white,
+                    side: BorderSide(color: Colors.black), // Add border color here
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20), // Set the desired border radius
+                      borderRadius: BorderRadius.circular(20), // Add border radius here
                     ),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align children to start and end
-                    children: [
-                      Text(
-                        'Next Step ',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: Colors.black,
-                      ),
-                    ],
-                  ),
                 ),
-              ],
-            ),
-          ],
+                SizedBox(width: 50,),
+                ElevatedButton(
+                    onPressed: () {
+                      // Call function to update Firestore document
+                      _updateUserData(user?.email as String); // Replace with user's email
+        
+                      // Navigate to the next page
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PaymentPage(data:widget.data),
+                        ),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Color(0xffebd9b4), // Change button color to black
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20), // Set the desired border radius
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Align children to start and end
+                      children: [
+                        Text(
+                          'Next Step ',
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        Icon(
+                          Icons.arrow_forward,
+                          color: Colors.black,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

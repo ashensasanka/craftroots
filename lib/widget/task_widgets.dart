@@ -34,7 +34,7 @@ class _Task_WidgetState extends State<Task_Widget> {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Row(
             children: [
               // image
@@ -94,7 +94,7 @@ class _Task_WidgetState extends State<Task_Widget> {
       child: Row(
         children: [
           Container(
-            width: 90,
+            width: 127,
             height: 28,
             decoration: BoxDecoration(
               color: Color(0xffEBD9B4),
@@ -108,7 +108,7 @@ class _Task_WidgetState extends State<Task_Widget> {
               child: Row(
                 children: [
                   Image.asset('images/icon_time1.jpg'),
-                  SizedBox(width: 10),
+                  SizedBox(width: 5),
                   Text(
                     widget._note.time,
                     style: TextStyle(
@@ -121,7 +121,7 @@ class _Task_WidgetState extends State<Task_Widget> {
               ),
             ),
           ),
-          SizedBox(width: 20),
+          SizedBox(width: 5),
           GestureDetector(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(

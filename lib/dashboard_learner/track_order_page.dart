@@ -155,7 +155,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                             Container(
                               padding: EdgeInsets.all(15),
                               decoration: BoxDecoration(
-                                color: Colors.black, // Background color
+                                color: Colors.white, // Background color
                                 shape: BoxShape.circle, // Make it round
                               ),
                               child: Text(
@@ -163,7 +163,7 @@ class _TrackOrderPageState extends State<TrackOrderPage> {
                                 style: TextStyle(
                                   fontSize: 30,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white, // Text color
+                                  color: Colors.black, // Text color
                                 ),
                               ),
                             ),

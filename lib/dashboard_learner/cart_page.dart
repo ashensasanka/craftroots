@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftroots/dashboard_learner/shop_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'checkout_page.dart';
@@ -22,6 +24,7 @@ class _CartPageState extends State<CartPage> {
   List<String> nameParts = [];
   String firstPart = '';
   String secondPart = '';
+  final User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     List<String> nameParts = widget.data['item2name'].split(',');
@@ -1012,13 +1015,24 @@ class _CartPageState extends State<CartPage> {
             bottom: 100,
             left: 110,
             child: ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CheckoutPage(data:widget.data),
-                  ),
-                );
+              onPressed: () async {
+                try {
+                  CollectionReference cartCollection =
+                  FirebaseFirestore.instance.collection('active_order${user?.uid}');
+                  Map<String, dynamic> dataWithDate = {
+                    ...widget.data,
+                    'date': FieldValue.serverTimestamp(),
+                  };
+                  await cartCollection.add(dataWithDate);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CheckoutPage(data: widget.data),
+                    ),
+                  );
+                } catch (e) {
+                  print('Error adding document to Firestore: $e');
+                }
               },// Add your icon here
               child: Text(
                 'Continue to Checkout',

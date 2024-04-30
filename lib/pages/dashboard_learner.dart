@@ -235,7 +235,7 @@ class _DashBoardState extends State<DashBoard> {
                                   left: 10,
                                   right: 10,
                                   child: Container(
-                                    height: 125,
+                                    height: 112,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(
                                           20), // Adjust the radius according to your preference
@@ -247,7 +247,7 @@ class _DashBoardState extends State<DashBoard> {
                                   ),
                                 ),
                                 Positioned(
-                                  bottom: 5,
+                                  bottom: 10,
                                   left: 15,
                                   child: Column(
                                     crossAxisAlignment:
@@ -483,7 +483,7 @@ class _DashBoardState extends State<DashBoard> {
                                   left: 10,
                                   right: 10,
                                   child: Container(
-                                    height: 110,
+                                    height: 100,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(
                                           20), // Adjust the radius according to your preference
@@ -495,7 +495,7 @@ class _DashBoardState extends State<DashBoard> {
                                   ),
                                 ),
                                 Positioned(
-                                  bottom: 5,
+                                  bottom: 10,
                                   left: 17,
                                   child: Column(
                                     crossAxisAlignment:

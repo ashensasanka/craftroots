@@ -10,7 +10,7 @@ class ProfileTextBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 30,
+      height: 33,
       child: Row(
         children: [
           Text(
@@ -19,10 +19,6 @@ class ProfileTextBox extends StatelessWidget {
               color: Colors.black,
               fontSize: 17,
             ),
-          ),
-          IconButton(
-            onPressed: onPressed,
-            icon: const Icon(Icons.edit),
           ),
         ],
       ),

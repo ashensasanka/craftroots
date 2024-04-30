@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:craftroots/pages/vendor_alert_page.dart';
 import 'package:craftroots/pages/vendor_login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,7 @@ class _VendorRegisterPageState extends State<VendorRegisterPage> {
       'selectedItems':selectedItems.join(',')
     });
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => LearnerAuthPage(userType: widget.userType,)));
+        context, MaterialPageRoute(builder: (context) => VedAlertPage()));
   }
 
   void signUserUp(List<String> selectedItems) async {

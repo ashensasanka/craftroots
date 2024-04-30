@@ -43,17 +43,6 @@ class _ShopPageState extends State<ShopPage> {
             ),
             actions: [
               IconButton(
-                icon: Icon(Icons.shopping_cart),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CartPage(data: {'item2name': ''}),
-                    ),
-                  );
-                },
-              ),
-              IconButton(
                 icon: Icon(Icons.person,size: 30,),
                 onPressed: () {
                   Navigator.push(

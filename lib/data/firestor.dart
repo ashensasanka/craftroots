@@ -8,11 +8,13 @@ import '../model/notes_model.dart';
 class Firestore_Datasource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   Future<bool> AddNote(String subtitle, String title, int image) async {
     try {
       var uuid = Uuid().v4();
       DateTime data = new DateTime.now();
+      String dateString = data.toString().split(' ')[0];
       await _firestore
           .collection('users')
           .doc(_auth.currentUser!.uid)
@@ -23,7 +25,7 @@ class Firestore_Datasource {
         'subtitle': subtitle,
         'isDon': false,
         'image': image,
-        'time': '${data.hour}:${data.minute}',
+        'time': '${dateString}',
         'title': title,
       });
       return true;
@@ -37,7 +39,7 @@ class Firestore_Datasource {
       var uuid = Uuid().v4();
       DateTime data = new DateTime.now();
       await _firestore
-          .collection('notecount')
+          .collection('notecount${user?.uid}')
           .doc(uuid)
           .set({
         'id': uuid,

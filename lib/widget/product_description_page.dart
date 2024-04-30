@@ -97,14 +97,9 @@ class _ProductDescriptionPageState extends State<ProductDescriptionPage> {
                   ),
                   onPressed: () async {
                     try {
-                      // Get a reference to the Firestore cart collection
                       CollectionReference cartCollection =
                       FirebaseFirestore.instance.collection('cart');
-
-                      // Add a new document to the cart collection with the data
                       await cartCollection.add(data);
-
-                      // Navigate to the CartPage
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => CartPage(data: data,)),

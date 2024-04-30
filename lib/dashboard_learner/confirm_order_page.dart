@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:craftroots/dashboard_learner/paymentdetails_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 
@@ -16,9 +17,8 @@ class ConfirmOrderPage extends StatefulWidget {
 }
 
 class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
-  bool _isChecked = false;
-  // Firestore instance
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? user = FirebaseAuth.instance.currentUser;
 
   String address = '';
   String cardNumber = '';
@@ -61,7 +61,7 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
     super.initState();
     // Fetch user data when the widget is initialized
     _fetchCartData('0HTfP8QTisE8GzRUcq1G');
-    _fetchUserData('ashen4@gmail.com'); // Replace with user's email
+    _fetchUserData(user?.email as String); // Replace with user's email
   }
 
   @override
@@ -95,9 +95,8 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
                 children: [
                   Icon(
                     Icons.location_on_outlined,
-                    // This is the icon you want to display
-                    size: 25, // Adjust the size of the icon as needed
-                    color: Colors.black, // Set the color of the icon
+                    size: 25,
+                    color: Colors.black,
                   ),
                   SizedBox(width: 15,),
                   Text(
@@ -124,13 +123,18 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
               SizedBox(height: 20),
               Row(
                 children: [
+                  Icon(
+                    Icons.shopping_cart,
+                    size: 25,
+                    color: Colors.black,
+                  ),
                   Text(
                     cart,
                     style: TextStyle(
                       fontSize: 15,
                     ),
                   ),
-                  SizedBox(width: 70,),
+                  SizedBox(width: 20,),
                   Text(
                     'LKR: 1500.00',
                     style: TextStyle(

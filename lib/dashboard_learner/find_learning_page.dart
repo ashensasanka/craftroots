@@ -144,6 +144,25 @@ class _FindLearningPageState extends State<FindLearningPage> {
                           }
                           // Extracting data from snapshot
                           final List<DocumentSnapshot> documents = snapshot.data!.docs;
+                          bool matchFound = false;
+                          if (_selectedAnswer1 == 0 && _selectedAnswer2 == 0) {
+                            matchFound = true;
+                          }
+                          if (_selectedAnswer1 == 0 && _selectedAnswer2 == 0) {
+                            matchFound = true;
+                          }
+                          if (_selectedAnswer1 == 0 && _selectedAnswer2 == 0) {
+                            matchFound = true;
+                          }
+                          if (_selectedAnswer1 == 0 && _selectedAnswer2 == 2) {
+                            matchFound = true;
+                          }
+                          if (_selectedAnswer1 == 1 && _selectedAnswer2 == 2) {
+                            matchFound = true;
+                          }
+                          if (!matchFound) {
+                            return Text('Please try again; no matches found');
+                          }
                           return Container(
                             height: 150,
                             child: Column(
@@ -191,7 +210,14 @@ class _FindLearningPageState extends State<FindLearningPage> {
                       actions: [
                         TextButton(
                           onPressed: () {
-                            Navigator.of(context).pop(); // Close the dialog
+                            // Get.offAll(FindLearningPage());
+                            // Navigator.of(context).pop();
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => FindLearningPage(),
+                              ),
+                            );
                           },
                           child: Text('OK'),
                         ),

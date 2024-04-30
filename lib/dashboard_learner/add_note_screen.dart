@@ -21,25 +21,27 @@ class _Add_creenState extends State<Add_creen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            SizedBox(height: 50,),
-            Image.asset(
-              'assets/logo_track_lear.jpeg', // Replace 'your_image.png' with your image file path
-              width: 500, // Adjust width as needed
-              height: 150, // Adjust height as needed
-            ),
-            SizedBox(height: 40),
-            title_widgets(),
-            SizedBox(height: 20),
-            subtite_wedgite(),
-            SizedBox(height: 20),
-            imagess(),
-            SizedBox(height: 20),
-            button()
-          ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(height: 50,),
+              Image.asset(
+                'assets/logo_track_lear.jpeg', // Replace 'your_image.png' with your image file path
+                width: 500, // Adjust width as needed
+                height: 150, // Adjust height as needed
+              ),
+              SizedBox(height: 40),
+              title_widgets(),
+              SizedBox(height: 20),
+              subtite_wedgite(),
+              SizedBox(height: 20),
+              imagess(),
+              SizedBox(height: 20),
+              button()
+            ],
+          ),
         ),
       ),
     );

@@ -45,9 +45,7 @@ class _OrderPlacePageState extends State<OrderPlacePage> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+
               Text(
                   'your order has been Placed',
                   textAlign: TextAlign.center, // Align text to center
@@ -65,7 +63,7 @@ class _OrderPlacePageState extends State<OrderPlacePage> {
                   );
                 },
                 child: Text(
-                  'Click Here',
+                  'Click here to access the video',
                   style: TextStyle(
                     fontSize: 15,
                     color: Colors.blue,
@@ -75,8 +73,7 @@ class _OrderPlacePageState extends State<OrderPlacePage> {
                   ),
                 ),
               ),
-            ],
-          ),
+
           SizedBox(height: 70,),
           ElevatedButton(
             onPressed: () {

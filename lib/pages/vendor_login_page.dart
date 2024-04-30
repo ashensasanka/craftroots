@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:craftroots/auth_pages/learner_auth.dart';
 import 'package:craftroots/pages/vendor_register_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 
 import 'dashboard_learner.dart';
+import 'forgot_password_page.dart';
 
 class VendorLoginPage extends StatefulWidget {
   final String userType;
@@ -36,12 +38,12 @@ class _VendorLoginPageState extends State<VendorLoginPage> {
         email: email.text,
         password: pass.text,
       );
-      // Navigator.push(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => DashBoard(),
-      //   ),
-      // );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LearnerAuthPage(userType: widget.userType),
+        ),
+      );
     } on FirebaseAuthException catch (e) {
       Navigator.pop(context);
       if (e.code == 'invalid-credential'){
@@ -51,15 +53,39 @@ class _VendorLoginPageState extends State<VendorLoginPage> {
 
   }
   // Wrong email message
-  void wrongEmailMessage(){
-    showDialog(
-      context: context,
-      builder: (context){
-        return const AlertDialog(
-          title: Text('Incorrect Email or Password'),
-        );
-      },
-    );
+  void wrongEmailMessage() {
+    if (mounted) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: Colors.white,
+            title: const Text(
+              'Alert!',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.black,
+              ),
+            ),
+            content: const Text(
+              'Incorrect Email or Password',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.black,
+              ),
+            ),
+            actions: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Retry'),
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   bool isPasswordVisible = false;
@@ -107,8 +133,7 @@ class _VendorLoginPageState extends State<VendorLoginPage> {
                             borderSide:
                             const BorderSide(color: Colors.black)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(100).copyWith(
-                                bottomRight: const Radius.circular(0)),
+                            borderRadius: BorderRadius.circular(100),
                             borderSide:
                             const BorderSide(color: Colors.black))),
                   ),
@@ -156,8 +181,7 @@ class _VendorLoginPageState extends State<VendorLoginPage> {
                             borderSide:
                             const BorderSide(color: Colors.black)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(100).copyWith(
-                                bottomRight: const Radius.circular(0)),
+                            borderRadius: BorderRadius.circular(100),
                             borderSide:
                             const BorderSide(color: Colors.black))),
                   ),
@@ -191,8 +215,37 @@ class _VendorLoginPageState extends State<VendorLoginPage> {
                             fontWeight: FontWeight.bold)),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Forgot your Password?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return ForgotPasswordPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Reset',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
                 const SizedBox(
-                  height: 50,
+                  height: 40,
                 ),
                 const Text('Don\'t have an account?',
                     style: TextStyle(color: Colors.black, fontSize: 13)),
