@@ -327,31 +327,6 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        SizedBox(width: 130,),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              if (pageno > 0) {
-                                pageno--;
-                              }
-                            });
-                          },
-                          icon: Icon(Icons.arrow_back),
-                          iconSize: 18, // Set the desired icon size
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              pageno++;
-                            });
-                          },
-                          icon: Icon(Icons.arrow_forward_outlined),
-                          iconSize: 18, // Set the desired icon size
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),

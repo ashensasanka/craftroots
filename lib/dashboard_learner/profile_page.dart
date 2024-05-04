@@ -26,38 +26,41 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> editField(String field) async {
     String newValue = "";
     await showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              backgroundColor: Colors.grey[900],
-              title: Text(
-                "Edit $field",
-                style: const TextStyle(color: Colors.white),
-              ),
-              content: TextField(
-                autofocus: true,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                    hintText: "Enter new $field",
-                    hintStyle: const TextStyle(color: Colors.grey)),
-                onChanged: (value) {
-                  newValue = value;
-                },
-              ),
-              actions: [
-                TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.white),
-                    )),
-                TextButton(
-                    onPressed: () => Navigator.of(context).pop(newValue),
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(color: Colors.white),
-                    )),
-              ],
-            ));
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          "Edit $field",
+          style: const TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+          autofocus: true,
+          style: const TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: "Enter new $field",
+            hintStyle: const TextStyle(color: Colors.grey),
+          ),
+          onChanged: (value) {
+            newValue = value;
+          },
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.white),
+              )),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(newValue),
+            child: const Text(
+              'Save',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
 
     if (newValue.trim().isNotEmpty) {
       await userCollection.doc(user?.email).update({field: newValue});
@@ -141,92 +144,90 @@ class _ProfilePageState extends State<ProfilePage> {
                                   width: double.infinity,
                                   height: 80,
                                   child: ListView.builder(
-                                      physics: const BouncingScrollPhysics(),
-                                      itemCount: items.length,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (ctx, index) {
-                                        return Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                setState(() {
+                                    physics: const BouncingScrollPhysics(),
+                                    itemCount: items.length,
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (ctx, index) {
+                                      return Column(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              setState(
+                                                () {
                                                   current = index;
-                                                });
-                                                pageController.animateToPage(
-                                                  current,
-                                                  duration: const Duration(
-                                                      milliseconds: 200),
-                                                  curve: Curves.ease,
-                                                );
-                                              },
-                                              child: AnimatedContainer(
+                                                },
+                                              );
+                                              pageController.animateToPage(
+                                                current,
                                                 duration: const Duration(
-                                                    milliseconds: 300),
-                                                margin: const EdgeInsets.all(5),
-                                                width: 183,
-                                                height: 55,
-                                                decoration: BoxDecoration(
-                                                  color: current == index
-                                                      ? Colors.white70
-                                                      : Color(0xffebd9b4),
-                                                  borderRadius: current == index
-                                                      ? BorderRadius.circular(
-                                                          12)
-                                                      : BorderRadius.circular(
-                                                          7),
-                                                  border: current == index
-                                                      ? Border.all(
-                                                          color: Colors
-                                                              .deepPurpleAccent,
-                                                          width: 2.5)
-                                                      : null,
-                                                ),
-                                                child: Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Icon(
-                                                        icons[index],
-                                                        size: current == index
-                                                            ? 23
-                                                            : 20,
+                                                    milliseconds: 200),
+                                                curve: Curves.ease,
+                                              );
+                                            },
+                                            child: AnimatedContainer(
+                                              duration: const Duration(
+                                                  milliseconds: 300),
+                                              margin: const EdgeInsets.all(5),
+                                              width: 183,
+                                              height: 55,
+                                              decoration: BoxDecoration(
+                                                color: current == index
+                                                    ? Colors.white70
+                                                    : Color(0xffebd9b4),
+                                                borderRadius: current == index
+                                                    ? BorderRadius.circular(12)
+                                                    : BorderRadius.circular(7),
+                                                border: current == index
+                                                    ? Border.all(
+                                                        color: Colors
+                                                            .deepPurpleAccent,
+                                                        width: 2.5)
+                                                    : null,
+                                              ),
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Icon(
+                                                      icons[index],
+                                                      size: current == index
+                                                          ? 23
+                                                          : 20,
+                                                      color: current == index
+                                                          ? Colors.black
+                                                          : Colors.black,
+                                                    ),
+                                                    Text(
+                                                      items[index],
+                                                      style: GoogleFonts.ubuntu(
+                                                        fontWeight:
+                                                            FontWeight.w500,
                                                         color: current == index
                                                             ? Colors.black
                                                             : Colors.black,
                                                       ),
-                                                      Text(
-                                                        items[index],
-                                                        style:
-                                                            GoogleFonts.ubuntu(
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          color: current ==
-                                                                  index
-                                                              ? Colors.black
-                                                              : Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ),
-                                            Visibility(
-                                              visible: current == index,
-                                              child: Container(
-                                                width: 5,
-                                                height: 5,
-                                                decoration: const BoxDecoration(
-                                                    color:
-                                                        Colors.deepPurpleAccent,
-                                                    shape: BoxShape.circle),
+                                          ),
+                                          Visibility(
+                                            visible: current == index,
+                                            child: Container(
+                                              width: 5,
+                                              height: 5,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.deepPurpleAccent,
+                                                shape: BoxShape.circle,
                                               ),
-                                            )
-                                          ],
-                                        );
-                                      }),
+                                            ),
+                                          )
+                                        ],
+                                      );
+                                    },
+                                  ),
                                 ),
 
                                 /// MAIN BODY
@@ -241,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
                                       return PageBuilder.buildPage(
-                                          index,context ,documentSnapshot);
+                                          index, context, documentSnapshot);
                                     },
                                   ),
                                 ),

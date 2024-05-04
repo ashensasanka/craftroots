@@ -275,9 +275,10 @@ class HomeController extends GetxController{
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
-  addVideos(String by, String level, String name, String thumb, String url){
+  addVideos(String by, String level, String name, String thumb, String url, String uid){
+    CollectionReference videoAdd = firestore.collection('videos${uid}');
     try {
-      DocumentReference doc = videoAddCollection.doc();
+      DocumentReference doc = videoAdd.doc();
       AddVideo product = AddVideo(
           id:doc.id,
           by:by,

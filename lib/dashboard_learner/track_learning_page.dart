@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../data/firestor.dart';
 import '../screens/play_video.dart';
 import '../widget/stream_note.dart';
 import 'add_note_screen.dart';
@@ -61,25 +62,16 @@ class _TrackLearningPageState extends State<TrackLearningPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
-                      height: 200,
-                      child: Center(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Column(
-                            children: [
+
                               StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection('videos${user?.uid}')
-                                    .snapshots(),
+                                stream: Firestore_Datasource().stream(false),
                                 builder: (context, snapshot) {
                                   if (!snapshot.hasData) {
                                     return Center(
                                         child: CircularProgressIndicator());
                                   } else {
-                                    final videos =
-                                        snapshot.data?.docs.reversed.toList();
-                                    if (videos == null || videos.isEmpty) {
+                                    final noteslist = Firestore_Datasource().getNotes(snapshot);
+                                    if (noteslist.length == 0) {
                                       // If the videos list is empty, display the text
                                       return Column(
                                         children: [
@@ -102,128 +94,12 @@ class _TrackLearningPageState extends State<TrackLearningPage> {
                                     } else {
                                       // If the videos list is not empty, display the list of videos
                                       List<Widget> videoWidgets = [];
-                                      for (var video in videos) {
-                                        final videoWidget = Column(
-                                          children: [
-                                            SizedBox(
-                                                height:
-                                                    16), // Add space between rows
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Colors.grey[200],
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              padding: EdgeInsets.all(8),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 5,
-                                                      ),
-                                                      Container(
-                                                        width: 180,
-                                                        height: 115,
-                                                        child: Stack(
-                                                          children: [
-                                                            ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20),
-                                                              child:
-                                                                  Image.network(
-                                                                video['thumb'],
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                                width: double
-                                                                    .maxFinite,
-                                                                height: 110,
-                                                              ),
-                                                            ),
-                                                            Positioned(
-                                                              top:
-                                                                  25, // Adjust the position of the icon as needed
-                                                              left: 55,
-                                                              child: IconButton(
-                                                                onPressed: () {
-                                                                  // Navigate to the video page
-                                                                  // Navigator.of(context).push(
-                                                                  //   MaterialPageRoute(
-                                                                  //     builder: (_) {
-                                                                  //       return PlayVideo(
-                                                                  //         videoName: video['name'],
-                                                                  //         videoURL: video['url'],
-                                                                  //       );
-                                                                  //     },
-                                                                  //   ),
-                                                                  // );
-                                                                },
-                                                                icon: Icon(
-                                                                  Icons
-                                                                      .play_circle_fill, // Choose the icon you want
-                                                                  size:
-                                                                      50, // Adjust the size of the icon as needed
-                                                                  color: Colors
-                                                                      .white, // Adjust the color of the icon as needed
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width: 10,
-                                                      ),
-                                                      Column(
-                                                        children: [
-                                                          Text(
-                                                            video['name'],
-                                                            style: TextStyle(
-                                                              fontWeight: FontWeight
-                                                                  .bold, // Make the text bold
-                                                              fontSize:
-                                                                  13, // Increase the font size
-                                                            ),
-                                                          ),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              '( ${video['level']} )'),
-                                                          SizedBox(
-                                                            height: 5,
-                                                          ),
-                                                          Text(
-                                                              'By : ${video['by']}'),
-                                                        ],
-                                                      )
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        );
-                                        videoWidgets.add(videoWidget);
-                                      }
-                                      return Expanded(
-                                        child: ListView(
-                                          children: videoWidgets,
-                                        ),
-                                      );
+                                      return SizedBox(width: 10,);
                                     }
                                   }
                                 },
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+
                     Stream_note(false),
                     SizedBox(
                       height: 5,
@@ -245,6 +121,7 @@ class _TrackLearningPageState extends State<TrackLearningPage> {
                         } else if (snapshot.hasError) {
                           return Text('Error: ${snapshot.error}');
                         } else {
+                          int value = snapshot.data!.toInt();
                           return Stack(
                             children: [
                               SfCircularChart(
@@ -254,7 +131,7 @@ class _TrackLearningPageState extends State<TrackLearningPage> {
                                     xValueMapper: (GDPData data, _) =>
                                         data.continent,
                                     yValueMapper: (GDPData data, _) =>
-                                        snapshot.data!.toDouble(),
+                                        value,
                                     pointColorMapper: (GDPData data, _) =>
                                         data.color,
                                     maximumValue: 100,
@@ -266,7 +143,7 @@ class _TrackLearningPageState extends State<TrackLearningPage> {
                                 bottom: 140,
                                 left: 170,
                                 child: Text(
-                                  '${snapshot.data}%', // Show the length as GDP value
+                                  '${value}%', // Show the length as GDP value
                                   style: TextStyle(fontSize: 30),
                                 ),
                               ),
