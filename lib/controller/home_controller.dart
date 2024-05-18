@@ -11,8 +11,7 @@ import '../model/product/product.dart';
 import '../model/product_category/product_category.dart';
 
 // Here we defined the class to access the database and handle the data query in documents
-class HomeController extends GetxController{
-
+class HomeController extends GetxController {
   String test = 'test string';
 
   // defined the variables as FirebaseFirestore store data as key value and FirebaseStorage store data as files
@@ -55,7 +54,7 @@ class HomeController extends GetxController{
   //Define the type of value
   DateTime birthday = DateTime.now();
   DateTime? logday;
-  String? lat,long;
+  String? lat, long;
   String category = 'Category';
   String brand = 'Fish Category';
   String from = 'From';
@@ -110,7 +109,6 @@ class HomeController extends GetxController{
     await fetchCategory();
     await fetchProducts();
     // await fetchPostDetails();
-    await fetchPostsList();
     // await fetchMessage();
     // await fetchLogDetails();
     // await fetchCartDetails();
@@ -156,7 +154,8 @@ class HomeController extends GetxController{
 
   // Add Post into postdetails collection
   // DateTime now = DateTime.now();
-  addPost(File? selectedImage, String filetype) async {
+  addPost(File? selectedImage, String filetype, String uid) async {
+    CollectionReference ownpostcoll = firestore.collection('postdetails${uid}');
 
     try {
       if (selectedImage == null) {
@@ -164,7 +163,7 @@ class HomeController extends GetxController{
         return;
       }
 
-      final imagePath = 'post/ashenfdbd${DateTime.now().millisecondsSinceEpoch}';
+      final imagePath = 'post/post${DateTime.now().millisecondsSinceEpoch}';
       final Reference storageReference = storage.ref().child(imagePath);
 
       // Specify content type as 'image/jpeg'
@@ -173,27 +172,30 @@ class HomeController extends GetxController{
       await storageReference.putFile(selectedImage, metadata);
       final String imageUrl = await storageReference.getDownloadURL();
 
-      final DocumentReference doc = postdetailsCollection.doc();
+      final DocumentReference doc = ownpostcoll.doc();
       final PostDetails postdetails = PostDetails(
-        id: doc.id,
-        achive_name: achivementNameCtrl.text,
-        filetype: filetype,
-        image: imageUrl // Add this field to your ChatDetails model
-      );
+          id: doc.id,
+          achive_name: achivementNameCtrl.text,
+          filetype: filetype,
+          image: imageUrl // Add this field to your ChatDetails model
+          );
 
       final Map<String, dynamic> postdetailsJson = postdetails.toJson();
       await doc.set(postdetailsJson);
 
-      Get.snackbar('Success', 'Post added successfully', colorText: Colors.green);
+      Get.snackbar('Success', 'Post added successfully',
+          colorText: Colors.green);
       setValuesDefault();
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
-  setValuesDefault(){
+
+  setValuesDefault() {
     achivementNameCtrl.clear();
     update();
   }
+
   // Add Seller messages into seller message collection
   // addSellerMessage(){
   //   try {
@@ -258,39 +260,41 @@ class HomeController extends GetxController{
   // }
   //
   // Add cart details into cart collection
-  addCart(int index){
+  addCart(int index) {
     try {
       DocumentReference doc = cartCollection.doc();
       PostDetails product = PostDetails(
-        id:doc.id,
-        image:postShowUi[index].image,
-        achive_name: postShowUi[index].achive_name,
-        filetype:postShowUi[index].filetype
-      );
+          id: doc.id,
+          image: postShowUi[index].image,
+          achive_name: postShowUi[index].achive_name,
+          filetype: postShowUi[index].filetype);
       final productJson = product.toJson();
       doc.set(productJson);
-      Get.snackbar('Success', 'Approved Post added successfully', colorText: Colors.green);
+      Get.snackbar('Success', 'Approved Post added successfully',
+          colorText: Colors.green);
       setValuesDefault();
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
-  addVideos(String by, String level, String name, String thumb, String url, String uid){
+
+  addVideos(String by, String level, String name, String thumb, String url,
+      String uid) {
     CollectionReference videoAdd = firestore.collection('videos${uid}');
     try {
       DocumentReference doc = videoAdd.doc();
       AddVideo product = AddVideo(
-          id:doc.id,
-          by:by,
+          id: doc.id,
+          by: by,
           level: level,
-          name:name,
-          thumb:thumb,
+          name: name,
+          thumb: thumb,
           timeStamp: DateTime.now(),
-          url:url
-      );
+          url: url);
       final productJson = product.toJson();
       doc.set(productJson);
-      Get.snackbar('Success', 'Approved Post added successfully', colorText: Colors.green);
+      Get.snackbar('Success', 'Approved Post added successfully',
+          colorText: Colors.green);
       setValuesDefault();
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
@@ -429,17 +433,22 @@ class HomeController extends GetxController{
   // }
   //
   // Fetch the post details from the post details collection
-  fetchPostsList() async{
+  fetchPosts(String uid) async {
+    CollectionReference videoAdd = firestore.collection('postdetails${uid}');
     try {
-      QuerySnapshot postSnapshot = await postdetailsCollection.get();
-      final List<PostDetails> retrievedPost = postSnapshot.docs.map((doc) => PostDetails.fromJson(doc.data() as Map<String, dynamic>)).toList();
-      postdetails.clear();
-      postdetails.assignAll(retrievedPost);
-      postShowUi.assignAll(postdetails);
-      Get.snackbar('Success', 'Post fetch successfully', colorText: Colors.green);
+      QuerySnapshot postSnapshot = await videoAdd.get();
+      final List<PostDetails> retrievedPost = postSnapshot.docs
+          .map(
+              (doc) => PostDetails.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
+      // postdetails.clear();
+      // postdetails.assignAll(retrievedPost);
+      postShowUi.assignAll(retrievedPost);
+      Get.snackbar('Success', 'Post fetch successfully',
+          colorText: Colors.green);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
-    } finally{
+    } finally {
       update();
     }
   }
@@ -448,53 +457,68 @@ class HomeController extends GetxController{
   fetchCategory() async {
     try {
       QuerySnapshot categorySnapshot = await categoryCollection.get();
-      final List<ProductCategory> retrievedCategories = categorySnapshot.docs.map((doc) =>
-          ProductCategory.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      final List<ProductCategory> retrievedCategories = categorySnapshot.docs
+          .map((doc) =>
+              ProductCategory.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
       productCategories.clear();
       productCategories.assignAll(retrievedCategories);
-      Get.snackbar('Success', 'Category fetch successfully', colorText: Colors.green);
+      Get.snackbar('Success', 'Category fetch successfully',
+          colorText: Colors.green);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
-    } finally{
+    } finally {
       update();
     }
   }
+
   fetchProducts() async {
     try {
       QuerySnapshot productSnapshot = await productCollection.get();
-      final List<Product> retrievedProducts = productSnapshot.docs.map((doc) => Product.fromJson(doc.data() as Map<String, dynamic>)).toList();
+      final List<Product> retrievedProducts = productSnapshot.docs
+          .map((doc) => Product.fromJson(doc.data() as Map<String, dynamic>))
+          .toList();
       products.clear();
       products.assignAll(retrievedProducts);
       productShowInUi.assignAll(products);
-      Get.snackbar('Success', 'Product fetch successfully', colorText: Colors.green);
+      Get.snackbar('Success', 'Product fetch successfully',
+          colorText: Colors.green);
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
-    } finally{
+    } finally {
       update();
     }
   }
 
   // Category filters
-  filterByCategory(String category){
+  filterByCategory(String category) {
     productShowInUi.clear();
-    productShowInUi = products.where((product) => product.category == category).toList();
+    productShowInUi =
+        products.where((product) => product.category == category).toList();
     update();
   }
 
   // Sort by price
-  sortByPrice({required bool ascending}){
+  sortByPrice({required bool ascending}) {
     List<Product> sortedProducts = List<Product>.from(productShowInUi);
-    sortedProducts.sort((a,b) => ascending ? a.price!.compareTo(b.price!) : b.price!.compareTo(a.price!));
+    sortedProducts.sort((a, b) => ascending
+        ? a.price!.compareTo(b.price!)
+        : b.price!.compareTo(a.price!));
     productShowInUi = sortedProducts;
     update();
   }
+
   // Brand category
   filterByBrand(List<String> brands) {
     if (brands.isEmpty) {
       productShowInUi = products.toList(); // Convert the iterable to a list
     } else {
-      List<String> lowerCaseBrands = brands.map((brand) => brand.toLowerCase()).toList();
-      productShowInUi = products.where((product) => lowerCaseBrands.contains(product.level?.toLowerCase() ?? '')).toList();
+      List<String> lowerCaseBrands =
+          brands.map((brand) => brand.toLowerCase()).toList();
+      productShowInUi = products
+          .where((product) =>
+              lowerCaseBrands.contains(product.level?.toLowerCase() ?? ''))
+          .toList();
     }
     update();
   }
@@ -503,12 +527,10 @@ class HomeController extends GetxController{
   deleteProduct(String id) async {
     try {
       await postdetailsCollection.doc(id).delete();
-      fetchPostsList();
     } catch (e) {
       Get.snackbar('Error', e.toString(), colorText: Colors.red);
     }
   }
 
-  testMethod(){
-  }
+  testMethod() {}
 }

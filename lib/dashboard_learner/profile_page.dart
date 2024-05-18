@@ -242,7 +242,10 @@ class _ProfilePageState extends State<ProfilePage> {
                                         const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
                                       return PageBuilder.buildPage(
-                                          index, context, documentSnapshot);
+                                        index,
+                                        context,
+                                        documentSnapshot,
+                                      );
                                     },
                                   ),
                                 ),

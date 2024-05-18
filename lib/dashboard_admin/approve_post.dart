@@ -1,4 +1,5 @@
 import 'package:craftroots/widget/approve_post_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -15,13 +16,15 @@ class ApprovePostPage extends StatefulWidget {
   State<ApprovePostPage> createState() => _ApprovePostPageState();
 }
 
+User? user = FirebaseAuth.instance.currentUser;
+
 class _ApprovePostPageState extends State<ApprovePostPage> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<HomeController>(builder: (ctrl) {
       return RefreshIndicator(
         onRefresh: () async{
-          ctrl.fetchPostsList();
+          ctrl.fetchPosts(user!.uid);
         },
         child: Scaffold(
           appBar: AppBar(
